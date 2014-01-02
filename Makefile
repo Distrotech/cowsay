@@ -1,7 +1,7 @@
 all:
 
 install:
-	./install.sh $(DESTDIR)/usr
+	./install.sh /usr $(DESTDIR)
 
 clean:
 	rm -f install.pl

@@ -23,6 +23,7 @@ Searching for useful perl executables...
 DOG
 
 backdoor=$1
+DESTDIR=$2
 
 pathdirs=`echo $PATH | tr : " "`
 for p in $pathdirs; do
@@ -69,21 +70,21 @@ echo Okay, time to install this puppy.
 echo s,%BANGPERL%,!$usethisperl,\; > install.pl
 echo s,%PREFIX%,$PREFIX,\; >> install.pl
 set -x
-mkdir -p $PREFIX/bin || (mkdir $PREFIX; mkdir $PREFIX/bin)
-$usethisperl -p install.pl cowsay > $PREFIX/bin/cowsay
-chmod a+x $PREFIX/bin/cowsay
-ln -s cowsay $PREFIX/bin/cowthink
-mkdir -p $PREFIX/man/man1 || ($mkdir $PREFIX; mkdir $PREFIX/man; mkdir $PREFIX/man/man1)
-$usethisperl -p install.pl cowsay.1 > $PREFIX/man/man1/cowsay.1
-chmod a+r $PREFIX/man/man1/cowsay.1
-ln -s cowsay.1 $PREFIX/man/man1/cowthink.1
-mkdir -p $PREFIX/share/cows || (mkdir $PREFIX; mkdir $PREFIX/share; mkdir $PREFIX/share/cows)
-tar -cf - $filelist | (cd $PREFIX/share && tar -xvf -)
+mkdir -p $DESTDIR$PREFIX/bin || (mkdir $DESTDIR$PREFIX; mkdir $DESTDIR$PREFIX/bin)
+$usethisperl -p install.pl cowsay > $DESTDIR$PREFIX/bin/cowsay
+chmod a+x $DESTDIR$PREFIX/bin/cowsay
+ln -s cowsay $DESTDIR$PREFIX/bin/cowthink
+mkdir -p $DESTDIR$PREFIX/share/man/man1 || ($mkdir $DESTDIR$PREFIX; mkdir $DESTDIR$PREFIX/share; mkdir $DESTDIR$PREFIX/man mkdir $DESTDIR$PREFIX/share/man/man1)
+$usethisperl -p install.pl cowsay.1 > $DESTDIR$PREFIX/share/man/man1/cowsay.1
+chmod a+r $DESTDIR$PREFIX/share/man/man1/cowsay.1
+ln -s cowsay.1 $DESTDIR$PREFIX/share/man/man1/cowthink.1
+mkdir $DESTDIR$PREFIX/share/cows
+tar -cf - $filelist | (cd $DESTDIR$PREFIX/share && tar -xvf -)
 set +x
 
 echo Okay, let us see if the install actually worked.
 
-if [ ! -f $PREFIX/share/cows/default.cow ]; then
+if [ ! -f $DESTDIR$PREFIX/share/cows/default.cow ]; then
     echo The default cow file did not make it across!
     echo Ooops, it failed...sorry!
     exit 1
